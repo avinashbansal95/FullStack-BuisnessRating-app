@@ -1,6 +1,7 @@
 const express       = require('express');
 const cookieParser  = require('cookie-parser');
 const bodyParser    = require('body-parser');
+const validator     = require('express-validator');
 const ejs           = require('ejs');
 const engine        = require('ejs-mate');
 const session       = require('express-session');
@@ -12,7 +13,8 @@ const flash         = require('connect-flash');
 
 let app       = express();
 
-//mongoose.connect('mongodb://localhost/rateme');
+//mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost:27017/rateme',{ useNewUrlParser: true });
 
 require('./config/passport')
 
@@ -25,6 +27,9 @@ app.use(cookieParser());
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+//after bodyparese middleware
+app.use(validator());
 
 app.use(session({
     secret           : 'This is my secret',
@@ -40,7 +45,7 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./routes/user')(app);
+require('./routes/user')(app, passport);
   
 
 
