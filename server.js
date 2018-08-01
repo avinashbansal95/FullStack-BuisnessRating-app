@@ -12,7 +12,7 @@ const MongoStore    = require('connect-mongo')(session);
 
 let app       = express();
 
-mongoose.connect('mongodb://localhost/rateme');
+//mongoose.connect('mongodb://localhost/rateme');
 
 app.use(express.static('public'));
 app.engine('ejs',engine);
@@ -25,14 +25,14 @@ app.use(session({
     resave           : false,
     saveUninitialized: false,
     store            : new MongoStore({mongooseConnection : mongoose.connection})
-}))
+}));
+
+require('./routes/user')(app);
   
 
 
-app.get('/',function(req, res, next)
-{
-    res.render('index');
-})
+
+
 
 
 
