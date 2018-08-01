@@ -28,7 +28,7 @@ app.get('/',function(req, res, next)
         res.render('user/login',{title:'Login || Rate Me',messages:errors, hasErrors:errors.length > 0})
     });
 
-    app.post('/login',passport.authenticate('local.login',{
+    app.post('/login',validateLogin,passport.authenticate('local.login',{
         successRedirect: '/home',
         failureRedirect: '/login',
         failureFlash: true
@@ -62,6 +62,30 @@ function validate(req, res, next){
 
       req.flash('error', messages);
       res.redirect('/signup')
+    }
+    else{
+        
+       return next();
+    }
+}
+
+function validateLogin(req, res, next) 
+{
+    
+    req.checkBody('email','Email field is empty').notEmpty();
+    req.checkBody('password','password field is empty').notEmpty();
+    var errors  = req.validationErrors();
+   
+    if(errors)
+    {
+        var messages = [];
+        errors.forEach((error) =>
+    {
+        messages.push(error.msg);
+    });
+
+      req.flash('error', messages);
+      res.redirect('/login')
     }
     else{
         
