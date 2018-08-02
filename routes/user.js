@@ -1,3 +1,10 @@
+
+const nodemailer    = require('nodemailer');
+let smtpTransport = require('nodemailer-smtp-transport');
+const async         = require('async');
+const crypto        = require('crypto');
+let User            = require('../models/user');
+const secret        = require('../secret/secret')
 module.exports = (app,passport) =>
 {
    
@@ -44,8 +51,141 @@ app.get('/',function(req, res, next)
 })
 app.get('/forgot',(req, res) =>
 {
-    res.render('user/forgot',{title:'Request Password Reset'});
+    var errors = req.flash('error');
+    var info = req.flash('info');
+    res.render('user/forgot',{title:'Request Password Reset',messages:errors, hasErrors:errors.length > 0,
+    info:info, noErrors:info.length > 0});
 })
+
+// app.post('/forgot',(req, res, next) =>
+// {
+//     // waterfal methods takes result of one particular function and passes into another function
+//     async.waterfall([
+//         function(callback) {
+//             crypto.randomBytes(20,(err, buff) =>  //buff is the generated 20 lenth inetger
+//         {
+//             var rand = buff.toString('hex');
+//             callback(err, rand);
+//         })
+//         },
+//            function(rand, callback)
+//            {
+//                User.findOne({'email': req.body.email},(err, user) =>
+//             {
+//               if(err) {
+//                 req.flash('error','Something went wrong');
+//                 return res.redirect('/forgot');
+//               } 
+//               if(!user)
+//               {
+//                   req.flash('error','No account with this email Id exists')
+//                   return res.redirect('/forgot')
+//               }
+//               user.passwordResetToken    = rand;
+//               user. passwordResetExpires = Date.now() + 60*60*1000;
+
+//               user.save((err) =>
+//             {
+//                 callback(err, rand, user)
+//             })
+//             })
+//            },
+//            function(rand, user, callback)
+//            {
+//                let smtpTransport = nodemailer.createTransport({
+//                    service : 'Gmail',
+//                    auth    : {
+//                        user: secret.auth.user,
+//                        pass: secret.auth.pass
+//                    }
+//                });
+
+//                let mailOptions = {
+//                    to     : user.email,
+//                    from   : 'RateMe '+'<'+secret.auth.user+'>',
+//                    subject:'Rate Me application password Reset Token',
+//                    text   : 'You have requested for password reset token. \n\n'+
+//                    'Please click on the link to complete the process: \n\n'+
+//                    'http://localhost:3000/reset/'+rand+'\n\n'
+
+//                };
+//                smtpTransport.sendMail(mailOptions,(err, res) =>
+//             {
+//                 req.flash('info','A passport Reset has been sent to' + user.email);
+//                 return callback(err, user);
+//             })
+//            }
+//     ],(err) =>
+// {
+//     if(err) return next(err);
+//     res.redirect('/forgot');
+// })
+// })
+
+//original one
+
+app.post('/forgot', (req, res, next) => {
+    async.waterfall([
+        function(callback){
+            crypto.randomBytes(20, (err, buf) => {
+                var rand = buf.toString('hex');
+                callback(err, rand);
+            });
+        },
+        
+        function(rand, callback){
+            User.findOne({'email':req.body.email}, (err, user) => {
+                if(!user){
+                    req.flash('error', 'No Account With That Email Exist Or Email is Invalid');
+                    return res.redirect('/forgot');
+                }
+                
+                user.passwordResetToken = rand;
+                user.passwordResetExpires = Date.now() + 60*60*1000;
+                
+                user.save((err) => {
+                    callback(err, rand, user);
+                });
+            })
+        },
+        
+        function(rand, user, callback){
+            var smtpTransport = nodemailer.createTransport({
+                service: 'Gmail',
+                secure: false,
+                auth: {
+                    user: secret.auth.user,
+                    pass: secret.auth.pass
+                },
+                tls:{
+                    rejectUnauthorized : false
+                }
+            });
+            
+            var mailOptions = {
+                to: user.email,
+                from: 'RateMe '+'<'+secret.auth.user+'>',
+                subject: 'RateMe Application Password Reset Token',
+                text: 'You have requested for password reset token. \n\n'+
+                    'Please click on the link to complete the process: \n\n'+
+                    'http://localhost:3000/reset/'+rand+'\n\n'
+            };
+            
+            smtpTransport.sendMail(mailOptions, (err, response) => {
+               req.flash('info', 'A password reset token has been sent to '+user.email);
+                return callback(err, user);
+            });
+        }
+    ], (err) => {
+        if(err){
+            return next(err);
+        }
+        
+        res.redirect('/forgot');
+    })
+});
+
+
 }
 
 function validate(req, res, next){

@@ -17,6 +17,7 @@ let app       = express();
 mongoose.connect('mongodb://localhost:27017/rateme',{ useNewUrlParser: true });
 
 require('./config/passport')
+require('./secret/secret')
 
 app.use(express.static('public'));
 
