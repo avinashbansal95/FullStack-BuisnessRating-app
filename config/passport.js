@@ -1,6 +1,8 @@
 const passport      = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 let User            = require('../models/user')
+const FacebookStrategy = require('passport-facebook').Strategy;
+const secret = require('../secret/secret')
 
 passport.serializeUser((user, done) =>
 {
@@ -66,3 +68,28 @@ return done(null, user);
 })
 }))
 
+
+passport.use(new FacebookStrategy(secret.facebook, (req, token, refreshToken, profile, done) => {
+    User.findOne({facebook:profile.id}, (err, user) => {
+        if(err){
+            return done(err);
+        }
+
+        if(user){
+            done(null, user);
+        }else{
+            var newUser = new User();
+            newUser.facebook = profile.id;
+            newUser.username = profile.displayName;
+            newUser.email = profile._json.email;
+            newUser.tokens.push({token:token});
+
+            newUser.save(function(err) {
+                if(err){
+                    console.log(err);
+                }
+                done(null, newUser);
+            });
+        }
+    })
+}));

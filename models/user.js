@@ -3,7 +3,7 @@ const bcrypt   = require('bcrypt-nodejs');
 
 let userSchema = mongoose.Schema({
     username: {type: String, required: true},
-    email   : {type: String, required: true},
+    email   : {type: String},
     password: {type: String},
     role    : {type: String, default: ''},
     company : {
@@ -11,7 +11,11 @@ let userSchema = mongoose.Schema({
         image:{type : String, default: ''}
     },
     passwordResetToken   : {type: String, default: ''},
-    passwordResetExpires : {type: Date, default: Date.now}
+    passwordResetExpires : {type: Date, default: Date.now},
+    facebook: {
+        type: String, default: ''},
+        tokens: Array
+    
 })
 
 userSchema.methods.encryptPassword = (password) =>
