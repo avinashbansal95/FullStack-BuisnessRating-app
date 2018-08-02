@@ -57,7 +57,7 @@ app.get('/',function(req, res, next)
     res.redirect('/home');
 })
 
-    app.get('/home',(req, res) =>
+    app.get('/home',isLoggedIn,(req, res) =>
 {
     var msg = req.flash('success');
 
