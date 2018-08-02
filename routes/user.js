@@ -3,10 +3,10 @@ module.exports = (app,passport) =>
    
 app.get('/',function(req, res, next)
 {
-    var msg = req.flash('success');
-    console.log(msg);
+    // var msg = req.flash('success');
+    // console.log(msg);
 
-    res.render('index',{title:'Index || Rate Me',messages:msg});
+    res.render('index',{title:'Index || Rate Me'});
 })
     app.get('/signup',(req, res) =>
     {
@@ -16,7 +16,7 @@ app.get('/',function(req, res, next)
     });
 
    app.post('/signup',validate,passport.authenticate('local.signup',{
-       successRedirect: '/',
+       successRedirect: '/home',
        failureRedirect: '/signup',
        failureFlash: true
    }))
@@ -37,9 +37,14 @@ app.get('/',function(req, res, next)
     app.get('/home',(req, res) =>
 {
     var msg = req.flash('success');
+
     console.log(msg);
 
     res.render('home',{title:'Home || Rate Me',messages: msg })
+})
+app.get('/forgot',(req, res) =>
+{
+    res.render('user/forgot',{title:'Request Password Reset'});
 })
 }
 
@@ -67,6 +72,8 @@ function validate(req, res, next){
         
        return next();
     }
+
+  
 }
 
 function validateLogin(req, res, next) 

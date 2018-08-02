@@ -1,12 +1,12 @@
 
 <% layout('layout') %>
 
-<div class="container">
+<!-- <div class="container">
         <br><br>
         <div class="text-center reg_msg">
             <h1><a href="/">RateMe  Login form</a></h1>
         </div>
-       <br><br>
+       <br><br> -->
        
        <!-- <div class="col-md-offset-4">
              <a href="/auth/facebook" class="btn btn-block btn-social btn-facebook btn-lg">
@@ -20,8 +20,8 @@
         <div class="text-center reg_msg">
             <h2 class="fancy"><span>SIGN UP</span></h2>
        </div><br> -->
-    <div class="form__container">
-            <div class="row signup">
+
+            <!-- <div class="row signup">
                     <% if(hasErrors) {%>
                         <% for(var i=0; i<messages.length; i++) {%>
                              <div class="alert alert-danger alert-dismissible" role="alert">
@@ -49,13 +49,82 @@
             
                       </form>
             
-                      <div style="margin-left:40px">
-                          <small style="font-weight: bold; font-size:13px;">Don't have an account? <a href="/signup">Sign Up</a></small>
+                      <div>
+                          <h5 class="pull-left>">Don't have an account? <a href="/signup">Sign Up</a></h5>
+                          <span><h5 class="pull-right"><a href='/forgot'> Forgot Your password?</a></h5></span>
                       </div> 
             
             
                 </div> 
-    </div>
+    
         
     </div>
-    
+     -->
+
+     <!-- //originial -->
+
+
+
+     <% layout('layout') %>
+   
+
+<div class="container">
+    <br><br>
+    <div class="text-center reg_msg">
+        <h1><a href="/">RateMe</a></h1>
+    </div>
+   <br><br>
+   
+   <div class="col-md-offset-4">
+         <a href="/auth/facebook" class="btn btn-block btn-social btn-facebook btn-lg">
+            <i class="fa fa-facebook"></i> Login with Facebook
+        </a>
+    </div><br>
+
+
+   <div class="text-center reg_msg">
+        <h2 class="fancy"><span>Login</span></h2>
+   </div><br>
+
+    <div class="row signup">
+        
+        <% if(hasErrors) {%>
+            <% for(var i=0; i<messages.length; i++) {%>
+                 <div class="alert alert-danger alert-dismissible" role="alert">
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <%= messages[i] %>
+            </div>
+             <% } %>
+             <% } %>
+
+        <form method="POST" action="/login">
+
+            <div class="form-group input_group">
+                <input id="email" class="form-control" name="email" type="text" autocomplete="on" placeholder="EMAIL" style="margin-bottom:20px;">
+            </div>
+
+            <div class="form-group input_group">
+                <input id="password" class="form-control" name="password" type="password" placeholder="PASSWORD" style="margin-bottom:20px;">
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" id="login" value="LOGIN" class="form-control btn btn-primary" name="login" style="">
+            </div>
+            
+            <div class="form-group">
+                <label for="">
+                    <input type="checkbox" name="rememberme" class="" value="yes">
+                </label>&nbsp;&nbsp;Remember Me
+            </div>
+
+          </form>
+
+          <div>
+              <h5 class="pull-left">Don't have an account? <a href="/signup">Sign Up</a></h5>
+              <h5 class="pull-right"><a href="/forgot">Forgot Your Password?</a></h5>
+          </div>
+
+
+    </div>
+</div>
