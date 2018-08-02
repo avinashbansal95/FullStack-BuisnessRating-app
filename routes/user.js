@@ -10,10 +10,16 @@ module.exports = (app,passport) =>
    
 app.get('/',function(req, res, next)
 {
-    // var msg = req.flash('success');
-    // console.log(msg);
-
+ if(req.session.cookie.originalMaxAge !== null)
+ {
+    res.redirect('/home')
+ }
+ else{
     res.render('index',{title:'Index || Rate Me'});
+ }
+    
+ 
+    
 })
     app.get('/signup',(req, res) =>
     {
@@ -36,10 +42,20 @@ app.get('/',function(req, res, next)
     });
 
     app.post('/login',validateLogin,passport.authenticate('local.login',{
-        successRedirect: '/home',
+        //successRedirect: '/home',
         failureRedirect: '/login',
         failureFlash: true
-    }))
+    }), (req, res) =>
+{
+    if(req.body.rememberme)
+    {
+        req.session.cookie.maxAge = 30*24*60*60*1000;
+    }
+    else{
+        req.session.cookie.expires = null;
+    }
+    res.redirect('/home');
+})
 
     app.get('/home',(req, res) =>
 {
@@ -130,11 +146,110 @@ app.get('/reset/:token', (req, res) => {
             return res.redirect('/forgot');
         }
         var errors = req.flash('error');
-        //var success = req.flash('success');
+        var success = req.flash('success');
         
-        res.render('user/reset', {title: 'Reset Your Password', messages: errors, hasErrors: errors.length > 0});
+        res.render('user/reset', {title: 'Reset Your Password', messages: errors, hasErrors: errors.length > 0,  success:success, noErrors:success.length > 0});
     });
 });
+
+app.post('/reset/:token', (req, res) =>
+{
+   async.waterfall([
+       function(callback)
+       {
+        User.findOne({passwordResetToken:req.params.token, passwordResetExpires: {$gt: Date.now()}}, (err, user) => {
+            if(!user){
+                req.flash('error', 'Password reset token has expired or is invalid. Enter your email to get a new token.');
+                return res.redirect('/forgot');
+            }
+            //Applying validations
+
+            req.checkBody('password','password is required').notEmpty();
+    
+            req.checkBody("password", "Password must include one lowercase character, one uppercase character, a number, and a special character.").matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/, "i");
+          
+            var errors = req.validationErrors();
+            if(req.body.password === req.body.cpassword)
+            {
+                if(errors)
+                {
+                    var messages = [];
+                    errors.forEach(function(error)
+                {
+                    messages.push(error.msg);
+                })
+                var errors = req.flash('error',messages);
+                var success = req.flash('success',);
+                //res.render('user/reset', {title: 'Reset Your Password', messages: error, hasErrors: error.length > 0, success:success, noErrors:success.length > 0});
+                res.redirect('/reset/'+req.params.token);
+                }
+                else{
+                    user.password = user.encryptPassword(req.body.password);
+                            user.passwordResetToken = undefined;
+                            user.passwordResetExpires = undefined;
+                            user.save((err) =>
+                        {
+                            if(err) console.log(err);
+                            req.flash('success','Your password is succesfully updated!!');
+                            callback(err, user)
+                        })
+                }
+            }
+
+            else{
+                req.flash('error','password and confirm password are not equal')
+                res.redirect('/reset/'+req.params.token);
+            }
+            //var success = req.flash('success');
+            
+            // res.render('user/reset', {title: 'Reset Your Password', messages: errors, hasErrors: errors.length > 0});
+        });
+       },
+      // Sending email
+
+      
+      function(user, callback){
+        var smtpTransport = nodemailer.createTransport({
+            service: 'Gmail',
+                secure: false,
+                auth: {
+                    user: secret.auth.user,
+                    pass: secret.auth.pass
+                },
+                tls:{
+                    rejectUnauthorized : false
+                }
+        });
+        
+        var mailOptions = {
+            to: user.email,
+            from: 'RateMe '+'<'+secret.auth.user+'>',
+            subject: 'Your password Has Been Updated.',
+            text: 'This is a confirmation that you updated the password for '+user.email
+        };
+        
+        smtpTransport.sendMail(mailOptions, (err, response) => {
+            callback(err, user);
+            
+            var error = req.flash('error');
+            var success = req.flash('success');
+            
+            res.render('user/reset', {title: 'Reset Your Password', messages: error, hasErrors: error.length > 0, success:success, noErrors:success.length > 0});
+        });
+    }
+
+
+   ])
+});
+
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    req.session.destroy((err) => {
+        res.redirect('/');
+    });
+})
+
 
 }
 
@@ -190,3 +305,10 @@ function validateLogin(req, res, next)
     }
 }
 
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    req.flash("error","you need to be logged in first");
+    res.redirect("/login");
+}
