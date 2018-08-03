@@ -36,6 +36,7 @@ app.get('/',function(req, res, next)
 
     app.get('/login',(req, res) =>
     {
+        
         var errors = req.flash('error');
         console.log(errors);
         res.render('user/login',{title:'Login || Rate Me',messages:errors, hasErrors:errors.length > 0})

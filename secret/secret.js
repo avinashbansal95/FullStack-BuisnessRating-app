@@ -4,7 +4,7 @@ module.exports = {
         pass:'bansal@123'
 
     },
-    facebook: {
+    facebook:{
         clientID     : '506728536407649',
         clientSecret : 'ec972cf9cc2046a4803283af4f77790d',
         profileField :['email','displayName'],

@@ -69,7 +69,7 @@ return done(null, user);
 }))
 
 
-passport.use(new FacebookStrategy(secret.facebook, (req, token, refreshToken, profile, done) => {
+passport.use(new FacebookStrategy(secret.facebook, (token, refreshToken, profile, done) => {
     User.findOne({facebook:profile.id}, (err, user) => {
         if(err){
             return done(err);
@@ -81,13 +81,14 @@ passport.use(new FacebookStrategy(secret.facebook, (req, token, refreshToken, pr
             var newUser = new User();
             newUser.facebook = profile.id;
             newUser.username = profile.displayName;
-            newUser.email = profile._json.email;
+            newUser.email =profile._json.email;
             newUser.tokens.push({token:token});
 
             newUser.save(function(err) {
                 if(err){
                     console.log(err);
                 }
+                console.log(newUser);
                 done(null, newUser);
             });
         }
