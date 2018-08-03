@@ -105,7 +105,8 @@ body {
 .sidebar-nav li a:hover {
     text-decoration: none;
     color: #fff;
-    background: #4aa1f3;
+    /* background: #4aa1f3; */
+    background-color: black;
 }
 
 .sidebar-nav li a:active,

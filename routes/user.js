@@ -55,6 +55,7 @@ app.get('/',function(req, res, next)
     else{
         req.session.cookie.expires = null;
     }
+
     res.redirect('/home');
 })
 
@@ -71,8 +72,9 @@ app.get('/auth/facebook', passport.authenticate('facebook', {scope: 'email'}));
     var msg = req.flash('success');
 
     console.log(msg);
+    let user  = req.user;
 
-    res.render('home',{title:'Home || Rate Me',messages: msg })
+    res.render('home',{title:'Home || Rate Me',messages: msg,currentUser: user })
 })
 app.get('/forgot',(req, res) =>
 {

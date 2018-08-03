@@ -76,6 +76,7 @@ passport.use(new FacebookStrategy(secret.facebook, (token, refreshToken, profile
         }
 
         if(user){
+            console.log(user);
             done(null, user);
         }else{
             var newUser = new User();
