@@ -13,6 +13,7 @@ $(document).ready(function(){
     
     $('#upload-input').on('change', function(){
         var uploadInput = $('#upload-input');
+        console.log(uploadInput);
         
         if(uploadInput.val() != ''){
             var formData = new FormData();
@@ -21,6 +22,7 @@ $(document).ready(function(){
             
             $.ajax({
                 url: '/upload',
+                cache: false,
                 type: 'POST',
                 data: formData,
                 processData: false,
