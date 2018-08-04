@@ -1,12 +1,12 @@
 module.exports = {
     auth :{
         user:'avinashbansal096@gmail.com',
-        pass:'bansal@123'
+        pass:'your pwd'
 
     },
     facebook:{
-        clientID     : '506728536407649',
-        clientSecret : 'ec972cf9cc2046a4803283af4f77790d',
+        clientID     : 'your id9',
+        clientSecret : 'your pwd',
         profileField :['email','displayName'],
         callbackURL  : 'http://localhost:3000/auth/facebook/callback',
         passRequestToCallback: true 
