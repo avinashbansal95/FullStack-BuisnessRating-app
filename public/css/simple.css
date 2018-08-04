@@ -27,7 +27,7 @@ body {
     height: 100%;
     margin-left: -250px;
     overflow-y: auto;
-    background:rgb(26, 26, 255);
+    background:black;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -106,7 +106,7 @@ body {
     text-decoration: none;
     color: #fff;
     /* background: #4aa1f3; */
-    background-color: black;
+    background-color: rgb(178, 178, 102);
 }
 
 .sidebar-nav li a:active,

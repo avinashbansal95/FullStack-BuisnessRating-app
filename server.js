@@ -53,7 +53,7 @@ app.use(function(req, res, next){
   });
 
 require('./routes/user')(app, passport);
-  
+  require('./routes/company/company')(app);
 
 
 
