@@ -5,7 +5,7 @@ const fs         = require('fs');
 
 module.exports = (app) =>
 {
-    app.get('/company/create',(req, res) =>
+    app.get('/company/create',isLoggedIn,(req, res) =>
 {
     res.render('company/company',{title:'Company Registration'})
 })
@@ -36,4 +36,13 @@ app.post('/upload', (req, res) => {
     form.parse(req);
     
 });
+}
+
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    req.flash("error","you need to be logged in first");
+    res.redirect("/login");
 }
