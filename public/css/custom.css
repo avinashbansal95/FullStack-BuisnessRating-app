@@ -45,6 +45,28 @@ input[type="submit"]{
     color: #fff;
 }
 
+
+
+
+.btn-google {
+    background: rgb(255, 77, 77);
+    border-radius: 0;
+    color: #fff;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #263961;
+    width: 50%;
+}
+
+.btn-google:link, .btn-google:visited {
+	color: #fff;
+}
+
+.btn-google:active, .btn-google:hover {
+    background: rgb(230, 0, 0);
+    color: #fff;
+}
+
 .main_body{
     margin: 0;
     padding: 0;

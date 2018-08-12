@@ -1,7 +1,8 @@
 const passport      = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-let User            = require('../models/user')
+const LocalStrategy    = require('passport-local').Strategy;
+let User               = require('../models/user')
 const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy   = require('passport-google-oauth20').Strategy
 const secret = require('../secret/secret')
 
 passport.serializeUser((user, done) =>
@@ -71,6 +72,11 @@ return done(null, user);
 
 passport.use(new FacebookStrategy(secret.facebook, (token, refreshToken, profile, done) => {
     User.findOne({facebook:profile.id}, (err, user) => {
+
+        console.log('token',token);
+        console.log('refreshtoken',refreshToken);
+        console.log('profile',profile);
+
         if(err){
             return done(err);
         }
@@ -83,6 +89,52 @@ passport.use(new FacebookStrategy(secret.facebook, (token, refreshToken, profile
             newUser.facebook = profile.id;
             newUser.username = profile.displayName;
             newUser.email =profile._json.email;
+            newUser.tokens.push({token:token});
+
+            newUser.save(function(err) {
+                if(err){
+                    console.log(err);
+                }
+                console.log(newUser);
+                done(null, newUser);
+            });
+        }
+    })
+}));
+
+
+//passport-google strategy
+
+// passport.use(new GoogleStrategy(secret.google,(token, refreshToken, profile, done) =>
+// {
+//     console.log(token);
+//     console.log(profile);
+// }))
+
+
+passport.use(new GoogleStrategy(secret.google, (token, refreshToken, profile, done) => {
+    User.findOne({google:profile.id}, (err, user) => {
+
+        console.log('token',token);
+        console.log("###########");
+        console.log('refreshtoken',refreshToken);
+        console.log("###########");
+
+        console.log('profile',profile);
+        console.log("###########");
+
+        if(err){
+            return done(err);
+        }
+
+        if(user){
+            console.log(user);
+            done(null, user);
+        }else{
+            var newUser = new User();
+            newUser.google = profile.id;
+            newUser.username = profile.displayName;
+            newUser.email =profile._json.email || profile.emails[0].value;
             newUser.tokens.push({token:token});
 
             newUser.save(function(err) {

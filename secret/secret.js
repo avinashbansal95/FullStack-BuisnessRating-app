@@ -1,14 +1,20 @@
 module.exports = {
     auth :{
         user:'avinashbansal096@gmail.com',
-        pass:'your pwd'
+        pass:'bansal@123'
 
     },
     facebook:{
-        clientID     : 'your id9',
-        clientSecret : 'your pwd',
+        clientID     : '506728536407649',
+        clientSecret : 'ec972cf9cc2046a4803283af4f77790d',
         profileField :['email','displayName'],
         callbackURL  : 'http://localhost:3000/auth/facebook/callback',
+        passRequestToCallback: true 
+    },
+    google:{
+        clientID : '545686626310-2gudmci9f264m195aoq85p05lujkms68.apps.googleusercontent.com',
+        clientSecret: '0QyKL9AOOJAWt2SXobnK1klX',
+        callbackURL  : 'http://localhost:3000/auth/google/callback',
         passRequestToCallback: true 
     }
 }

@@ -13,6 +13,7 @@ let userSchema = mongoose.Schema({
     passwordResetToken   : {type: String, default: ''},
     passwordResetExpires : {type: Date, default: Date.now},
     facebook: { type: String, default: ''},
+    google  : {type:String, default: ''},
        
         tokens: Array
     
