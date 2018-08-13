@@ -20,14 +20,14 @@ module.exports = {
         clientID : process.env.LINKEDIN_CLIENT_ID,
         clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
         scope: ['r_emailaddress', 'r_basicprofile'],
-        callbackURL  : 'https://desolate-woodland-26129.herokuapp.com/linkedin/callback',
+        callbackURL  : 'https://desolate-woodland-26129.herokuapp.com/auth/linkedin/callback',
         passRequestToCallback: true 
     },
     github:{
         clientID : process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
        
-        callbackURL  : 'http://localhost:3000/auth/github/callback',
+        callbackURL  : 'https://desolate-woodland-26129.herokuapp.com/auth/github/callback',
         passRequestToCallback: true 
     },
     mongoURI : process.env.MONGO_URI,
