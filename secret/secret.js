@@ -16,6 +16,13 @@ module.exports = {
         clientSecret: '0QyKL9AOOJAWt2SXobnK1klX',
         callbackURL  : 'http://localhost:3000/auth/google/callback',
         passRequestToCallback: true 
+    },
+    linkedin:{
+        clientID : '81bi15gz90nvit',
+        clientSecret: 'ughSQ4IhUXT4lePS',
+        scope: ['r_emailaddress', 'r_basicprofile'],
+        callbackURL  : 'http://localhost:3000/auth/linkedin/callback',
+        passRequestToCallback: true 
     }
 }
 

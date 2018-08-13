@@ -2,7 +2,8 @@ const passport      = require('passport');
 const LocalStrategy    = require('passport-local').Strategy;
 let User               = require('../models/user')
 const FacebookStrategy = require('passport-facebook').Strategy;
-const GoogleStrategy   = require('passport-google-oauth20').Strategy
+const GoogleStrategy   = require('passport-google-oauth20').Strategy;
+const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 const secret = require('../secret/secret')
 
 passport.serializeUser((user, done) =>
@@ -103,14 +104,6 @@ passport.use(new FacebookStrategy(secret.facebook, (token, refreshToken, profile
 }));
 
 
-//passport-google strategy
-
-// passport.use(new GoogleStrategy(secret.google,(token, refreshToken, profile, done) =>
-// {
-//     console.log(token);
-//     console.log(profile);
-// }))
-
 
 passport.use(new GoogleStrategy(secret.google, (token, refreshToken, profile, done) => {
     User.findOne({google:profile.id}, (err, user) => {
@@ -147,3 +140,44 @@ passport.use(new GoogleStrategy(secret.google, (token, refreshToken, profile, do
         }
     })
 }));
+
+//passport-linkedin strategy
+
+
+passport.use(new LinkedInStrategy(secret.linkedin, (token, refreshToken, profile, done) => {
+    User.findOne({linkedin:profile.id}, (err, user) => {
+
+        console.log('token',token);
+        console.log("###########");
+        console.log('refreshtoken',refreshToken);
+        console.log("###########");
+
+        console.log('profile',profile);
+        console.log("###########");
+
+        if(err){
+            return done(err);
+        }
+
+        if(user){
+            console.log(user);
+            done(null, user);
+        }else{
+            var newUser = new User();
+            newUser.linkedin = profile.id;
+            newUser.username = profile.displayName;
+            newUser.email    = profile._json.email || profile.emails[0].value;
+            newUser.tokens.push({token:token});
+
+            newUser.save(function(err) {
+                if(err){
+                    console.log(err);
+                }
+                console.log(newUser);
+                done(null, newUser);
+            });
+        }
+    })
+}));
+
+

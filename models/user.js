@@ -14,6 +14,7 @@ let userSchema = mongoose.Schema({
     passwordResetExpires : {type: Date, default: Date.now},
     facebook: { type: String, default: ''},
     google  : {type:String, default: ''},
+    linkedin : {type:String, default:''},
        
         tokens: Array
     

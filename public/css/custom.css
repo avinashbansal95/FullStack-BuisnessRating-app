@@ -67,6 +67,27 @@ input[type="submit"]{
     color: #fff;
 }
 
+
+
+.btn-linkedin {
+    background: rgb(102, 179, 255);
+    border-radius: 0;
+    color: #fff;
+    border-width: 1px;
+    border-style: solid;
+   
+    width: 50%;
+}
+
+.btn-linkedin:link, .btn-linkedin:visited {
+	color: #fff;
+}
+
+.btn-linkedin:active, .btn-linkedin:hover {
+    background:rgb(0, 115, 230);
+    color: #fff;
+}
+
 .main_body{
     margin: 0;
     padding: 0;

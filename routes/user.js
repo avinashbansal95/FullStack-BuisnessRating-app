@@ -59,6 +59,16 @@ app.get('/',function(req, res, next)
     res.redirect('/home');
 })
 
+
+app.get('/auth/linkedin', passport.authenticate('linkedin', {scope: [ 'r_basicprofile','r_emailaddress']}));
+
+
+app.get('/auth/linkedin/callback', passport.authenticate('linkedin', {
+    successRedirect: '/home',
+    failureRedirect: '/login',
+    failureFlash: true
+}))
+
 app.get('/auth/google', passport.authenticate('google', {scope: [ ' profile','email']}));
 
 app.get('/auth/google/callback', passport.authenticate('google', {
