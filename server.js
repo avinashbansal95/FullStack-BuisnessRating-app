@@ -9,12 +9,16 @@ const mongoose      = require('mongoose');
 const MongoStore    = require('connect-mongo')(session);
 const passport      = require('passport');
 const flash         = require('connect-flash');
+const secret        = require('./secret/secret.js');
+const port          = process.env.port || 3000
 
 
 let app       = express();
 
 //mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/rateme',{ useNewUrlParser: true });
+//mongoose.connect('mongodb://localhost:27017/rateme',{ useNewUrlParser: true });
+
+mongoose.connect(secret.mongoURI)
 
 require('./config/passport')
 require('./secret/secret')
@@ -62,7 +66,7 @@ require('./routes/user')(app, passport);
 
 
 
-app.listen(3000,() =>
+app.listen(port,() =>
 {
     console.log("serevr started at port 3000");
 })
