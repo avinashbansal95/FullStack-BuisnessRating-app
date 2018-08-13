@@ -146,10 +146,10 @@ app.post('/forgot', (req, res, next) => {
                 auth: {
                     user: secret.auth.user,
                     pass: secret.auth.pass
-                },
-                tls:{
-                    rejectUnauthorized : false
                 }
+                // tls:{
+                //     rejectUnauthorized : false
+                // }
             });
             
             var mailOptions = {
@@ -158,7 +158,7 @@ app.post('/forgot', (req, res, next) => {
                 subject: 'RateMe Application Password Reset Token',
                 text: 'You have requested for password reset token. \n\n'+
                     'Please click on the link to complete the process: \n\n'+
-                    secret.webURL+rand+'\n\n'
+                    secret.webURL + rand+'\n\n'
             };
             
             smtpTransport.sendMail(mailOptions, (err, response) => {
@@ -254,10 +254,10 @@ app.post('/reset/:token', (req, res) =>
                 auth: {
                     user: secret.auth.user,
                     pass: secret.auth.pass
-                },
-                tls:{
-                    rejectUnauthorized : false
                 }
+                // tls:{
+                //     rejectUnauthorized : false
+                // }
         });
         
         var mailOptions = {
