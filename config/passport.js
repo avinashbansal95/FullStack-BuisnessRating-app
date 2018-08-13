@@ -4,6 +4,7 @@ let User               = require('../models/user')
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy   = require('passport-google-oauth20').Strategy;
 const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
+const GithubStrategy = require('passport-github2').Strategy;
 const secret = require('../secret/secret')
 
 passport.serializeUser((user, done) =>
@@ -181,3 +182,42 @@ passport.use(new LinkedInStrategy(secret.linkedin, (token, refreshToken, profile
 }));
 
 
+//github strategy
+
+
+
+passport.use(new GithubStrategy(secret.github, (token, refreshToken, profile, done) => {
+    User.findOne({github:profile.id}, (err, user) => {
+
+        console.log('token',token);
+        console.log("###########");
+        console.log('refreshtoken',refreshToken);
+        console.log("###########");
+
+        console.log('profile',profile);
+        console.log("###########");
+
+        if(err){
+            return done(err);
+        }
+
+        if(user){
+            console.log(user);
+            done(null, user);
+        }else{
+            var newUser = new User();
+            newUser.github = profile.id;
+            newUser.username = profile.displayName;
+            newUser.email    = profile._json.email || profile.emails[0].value;
+            newUser.tokens.push({token:token});
+
+            newUser.save(function(err) {
+                if(err){
+                    console.log(err);
+                }
+                console.log(newUser);
+                done(null, newUser);
+            });
+        }
+    })
+}));

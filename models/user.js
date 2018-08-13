@@ -15,6 +15,7 @@ let userSchema = mongoose.Schema({
     facebook: { type: String, default: ''},
     google  : {type:String, default: ''},
     linkedin : {type:String, default:''},
+    github   : {type:String, default:''},
        
         tokens: Array
     

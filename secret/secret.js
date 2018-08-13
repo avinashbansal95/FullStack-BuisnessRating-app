@@ -20,8 +20,15 @@ module.exports = {
     linkedin:{
         clientID : '81bi15gz90nvit',
         clientSecret: 'ughSQ4IhUXT4lePS',
-        scope: ['r_emailaddress', 'r_basicprofile'],
-        callbackURL  : 'http://localhost:3000/auth/linkedin/callback',
+       
+        callbackURL  : 'http://localhost:3000/auth/github/callback',
+        passRequestToCallback: true 
+    },
+    github:{
+        clientID : 'bafe53eb08cc99771319',
+        clientSecret: 'bec411ba5c8471f634937deeb23b079695ce46ca',
+        //scope: ['r_emailaddress', 'r_basicprofile'],
+        callbackURL  : 'http://localhost:3000/auth/github/callback',
         passRequestToCallback: true 
     }
 }

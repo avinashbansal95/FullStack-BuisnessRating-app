@@ -60,6 +60,15 @@ app.get('/',function(req, res, next)
 })
 
 
+app.get('/auth/github', passport.authenticate('github', { scope: [ 'user:email' ] }));
+
+
+app.get('/auth/github/callback', passport.authenticate('github', {
+    successRedirect: '/home',
+    failureRedirect: '/login',
+    failureFlash: true
+}))
+
 app.get('/auth/linkedin', passport.authenticate('linkedin', {scope: [ 'r_basicprofile','r_emailaddress']}));
 
 

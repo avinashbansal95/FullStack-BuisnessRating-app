@@ -54,7 +54,6 @@ input[type="submit"]{
     color: #fff;
     border-width: 1px;
     border-style: solid;
-    border-color: #263961;
     width: 50%;
 }
 
@@ -68,6 +67,27 @@ input[type="submit"]{
 }
 
 
+
+
+
+.btn-github {
+    background:rgb(0, 128, 0);
+    border-radius: 0;
+    color: #fff;
+    border-width: 1px;
+    border-style: solid;
+   
+    width: 50%;
+}
+
+.btn-github:link, .btn-github:visited {
+	color: #fff;
+}
+
+.btn-github:active, .btn-github:hover {
+    background:rgb(0, 100, 0);
+    color: #fff;
+}
 
 .btn-linkedin {
     background: rgb(102, 179, 255);
