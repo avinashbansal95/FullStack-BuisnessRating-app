@@ -146,10 +146,10 @@ app.post('/forgot', (req, res, next) => {
                 auth: {
                     user: secret.auth.user,
                     pass: secret.auth.pass
+                },
+                tls:{
+                    rejectUnauthorized : false
                 }
-                // tls:{
-                //     rejectUnauthorized : false
-                // }
             });
             
             var mailOptions = {
@@ -254,10 +254,10 @@ app.post('/reset/:token', (req, res) =>
                 auth: {
                     user: secret.auth.user,
                     pass: secret.auth.pass
+                },
+                tls:{
+                    rejectUnauthorized : false
                 }
-                // tls:{
-                //     rejectUnauthorized : false
-                // }
         });
         
         var mailOptions = {

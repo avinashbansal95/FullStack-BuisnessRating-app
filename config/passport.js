@@ -167,6 +167,7 @@ passport.use(new LinkedInStrategy(secret.linkedin, (token, refreshToken, profile
             var newUser = new User();
             newUser.linkedin = profile.id;
             newUser.username = profile.displayName;
+            newUser.ProfileImage = profile._json.pictureURL || profile.photos[0].value;
             newUser.email    = profile._json.email || profile.emails[0].value;
             newUser.tokens.push({token:token});
 
@@ -209,6 +210,8 @@ passport.use(new GithubStrategy(secret.github, (token, refreshToken, profile, do
             newUser.github = profile.id;
             newUser.username = profile.displayName;
             newUser.email    = profile._json.email || profile.emails[0].value;
+            newUser.ProfileImage = profile._json.avatar_url || profile.photos[0].value
+            console.log( profile.photos[0].value);
             newUser.tokens.push({token:token});
 
             newUser.save(function(err) {
