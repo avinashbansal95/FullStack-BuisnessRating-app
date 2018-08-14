@@ -16,9 +16,9 @@ const port          = process.env.PORT || 3000
 let app       = express();
 
 //mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/rateme',{ useNewUrlParser: true });
+//mongoose.connect('mongodb://localhost:27017/rateme',{ useNewUrlParser: true });
 
-//mongoose.connect(secret.mongoURI)
+mongoose.connect(secret.mongoURI)
 
 require('./config/passport')
 require('./secret/secret')
